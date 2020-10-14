@@ -32,7 +32,7 @@ class MyObjectTest {
     }
 
     @AfterAll
-    static void clearBl() {
+    static void clearBlackList() {
         blackList.clear();
     }
 
@@ -47,7 +47,7 @@ class MyObjectTest {
 
     @ParameterizedTest
     @ValueSource(ints = { 100, 99999999 })
-    void name(int number) {
+    void machineFastEnough(int number) {
         assertTimeout(Duration.ofMillis(5), () -> {
             int a = 0, b = 1, fib;
             for (int i = 0; i < number; i++) {

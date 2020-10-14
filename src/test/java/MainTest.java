@@ -2,9 +2,27 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
+
+    @TestFactory
+    public Stream<DynamicTest> sumDynamicTestsFromStream() {
+        final AtomicInteger atomicInteger = new AtomicInteger();
+        return Stream.generate(atomicInteger::incrementAndGet)
+                .limit(100)
+                .map(integer -> DynamicTest.dynamicTest(
+                        String.format("Sum test with number %d", integer),
+                        () -> assertEquals(
+                                Main.sum(integer, integer),
+                                integer + integer
+                        )
+                ));
+    }
+
     private static int a;
 
     @BeforeAll
