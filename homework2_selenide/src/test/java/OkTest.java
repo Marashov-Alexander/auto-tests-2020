@@ -7,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 
 public class OkTest {
 
-    private final static String login = "";
-    private final static String password = "";
+    private final static String login = "technopolisBot206";
+    private final static String password = "technopolis16";
 
     LoginPage loginPage = new LoginPage();
     MainPage mainPage;
@@ -27,9 +29,8 @@ public class OkTest {
         Configuration.baseUrl = "https://ok.ru";
     }
 
-    @Order(1)
     @Test
-    public void userCanLogin() {
+    public void A_userCanLogin() {
         Assertions.assertTrue(
                 loginPage
                         .open()
@@ -38,19 +39,20 @@ public class OkTest {
         );
     }
 
-    @Order(2)
     @Test
-    public void userCanSearch() {
+    public void B_userCanSearch() {
         mainPage = new MainPage();
         searchPage = mainPage.open().searchBy(start + " " + end);
-        Assertions.assertTrue(searchPage != null);
+        Assertions.assertNotNull(searchPage);
     }
 
-    @Order(3)
     @Test
-    public void searchIsCorrect() {
-        final String value = searchPage.firstValue();
-        assertThat(value, anyOf(startsWith(start), endsWith(end)));
+    public void C_searchIsCorrect() {
+        searchPage = new SearchPage();
+        final String value = searchPage.anySearchValue();
+        final int resultsCount = searchPage.resultsCount();
+        Assertions.assertTrue(resultsCount > 0);
+        assertThat(value, allOf(containsString(start), containsString(end)));
     }
 
 }
